@@ -1,24 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+
+import { ConfigurationAction } from './reducers/configuration/configuration.actions';
+import { Dispatch } from 'redux';
+import { Header } from './components/layouts';
+import { NavBar } from './components/layouts/NavBar/NavBar';
+import { loadApplications } from './reducers/configuration/configuration.action-creators';
+import useConfigurations from './hooks/useConfigurations';
+import { useDispatch } from 'react-redux';
 
 function App() {
+  const { getConfigurations } = useConfigurations();
+  const dispatch = useDispatch<Dispatch<ConfigurationAction>>();
+  dispatch(loadApplications(getConfigurations()));
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Header />
+      <div className="content">
+        <NavBar />
+      </div>
     </div>
   );
 }
