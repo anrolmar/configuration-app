@@ -11,4 +11,17 @@ export interface AddApplicationAction {
   payload: Application;
 }
 
-export type ConfigurationAction = LoadApplicationsAction | AddApplicationAction;
+export interface ResetApplicationAction {
+  type: ConfigurationActionType.RESET_APPLICATION;
+}
+
+export interface SetApplicationAction {
+  type: ConfigurationActionType.SET_APPLICATION;
+  payload: Application;
+}
+
+export type ConfigurationAction =
+  | LoadApplicationsAction
+  | AddApplicationAction
+  | ResetApplicationAction
+  | SetApplicationAction;

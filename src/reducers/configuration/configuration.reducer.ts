@@ -23,10 +23,22 @@ const configurationReducer = (
         applications: action.payload,
       };
 
+    case ConfigurationActionType.RESET_APPLICATION:
+      return {
+        ...state,
+        selectedApplication: null,
+      };
+
     case ConfigurationActionType.ADD_APPLICATION:
       return {
         ...state,
         applications: [...state.applications, action.payload],
+      };
+
+    case ConfigurationActionType.SET_APPLICATION:
+      return {
+        ...state,
+        selectedApplication: action.payload,
       };
 
     default:
