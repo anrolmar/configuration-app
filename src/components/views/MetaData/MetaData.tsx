@@ -1,27 +1,36 @@
 import './MetaData.scss';
 
-import { ConnectedProps, connect } from 'react-redux';
+import { Application, Version } from '../../../types';
 import { useEffect, useState } from 'react';
 
+import { MetaDataProps } from './types';
 import { RootState } from '../../../reducers/root.reducers';
 import TextField from '@mui/material/TextField';
+import { connect } from 'react-redux';
 import { selectSelectedApplication } from '../../../reducers/configuration/configuration.selectors';
 import useConfigurations from '../../../hooks/useConfigurations';
 
-const MetaData: React.FC<MetaDataProps> = ({ selectedApplication }) => {
-  const { getLastVersion } = useConfigurations();
-  const lastVersion = getLastVersion(selectedApplication);
+const MetaData: React.FC<Props> = ({ version, selectedApplication }) => {
+  let versionData: Version | undefined;
+
+  const { getVersion, getLastVersion } = useConfigurations();
+
+  if (version) {
+    versionData = getVersion(selectedApplication, version);
+  } else {
+    if (selectedApplication) versionData = getLastVersion(selectedApplication);
+  }
 
   const [name, setName] = useState('');
   const [owner, setOwner] = useState('');
   const [manager, setManager] = useState('');
   useEffect(() => {
-    if (lastVersion) {
-      setName(lastVersion.metaData.name);
-      setOwner(lastVersion.metaData.owner);
-      setManager(lastVersion.metaData.manager);
+    if (versionData) {
+      setName(versionData.metaData.name);
+      setOwner(versionData.metaData.owner);
+      setManager(versionData.metaData.manager);
     }
-  }, [lastVersion]);
+  }, [versionData]);
 
   const handleNameChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -75,8 +84,10 @@ const mapStateToProps = (state: RootState) => ({
   selectedApplication: selectSelectedApplication(state),
 });
 
-const connector = connect(mapStateToProps);
+interface StateProps {
+  selectedApplication?: Application;
+}
 
-type MetaDataProps = ConnectedProps<typeof connector>;
+type Props = StateProps & MetaDataProps;
 
-export default connector(MetaData);
+export default connect(mapStateToProps, null)(MetaData);

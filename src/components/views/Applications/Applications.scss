@@ -1,22 +1,12 @@
-.configurations {
+.applications {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   width: 100%;
 
-  .icon {
-    margin-right: 0.5rem;
-  }
-
   .table {
     width: 75%;
-
-    .buttons {
-      display: flex;
-      justify-content: right;
-      margin-bottom: 1rem;
-    }
   }
 
   .details {

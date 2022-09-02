@@ -15,20 +15,39 @@ import TableHead from '@mui/material/TableHead';
 import { TableProps } from './types';
 import TableRow from '@mui/material/TableRow';
 import { connect } from 'react-redux';
+import useConfigurations from '../../../hooks/useConfigurations';
 
 const CustomTable: React.FC<Props> = ({ headers, data, applications, setApplication, showApplication }) => {
+  const { getVersionValue } = useConfigurations();
+
   const renderHeaders = () => {
-    return headers.map((header: string, index: number) => {
+    return headers.map((header: any, index: number) => {
       if (index === 0) {
-        return <TableCell key={index}>{header}</TableCell>;
+        return <TableCell key={index}>{header.label}</TableCell>;
       } else {
         return (
           <TableCell key={index} align="right">
-            {header}
+            {header.label}
           </TableCell>
         );
       }
     });
+  };
+
+  const renderCell = (row: any, index: number, type: string, field: string) => {
+    const fieldValue = getVersionValue(row, type, field);
+    if (index === 0)
+      return (
+        <TableCell component="th" scope="row" key={index}>
+          {fieldValue}
+        </TableCell>
+      );
+    else
+      return (
+        <TableCell align="right" key={index}>
+          {fieldValue}
+        </TableCell>
+      );
   };
 
   const handleRowClick = (event: React.MouseEvent<unknown>, index: number) => {
@@ -43,18 +62,14 @@ const CustomTable: React.FC<Props> = ({ headers, data, applications, setApplicat
           <TableRow>{renderHeaders()}</TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row, index) => (
+          {data.map(({ version }, index) => (
             <TableRow
               key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               onClick={(event) => handleRowClick(event, index)}
               className="row"
             >
-              <TableCell component="th" scope="row">
-                {row.version.metaData.name}
-              </TableCell>
-              <TableCell align="right">{row.version.metaData.owner}</TableCell>
-              <TableCell align="right">{row.version.metaData.manager}</TableCell>
+              {headers.map((header, index) => renderCell(version, index, header.type, header.field))}
             </TableRow>
           ))}
         </TableBody>

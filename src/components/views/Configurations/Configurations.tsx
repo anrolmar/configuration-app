@@ -2,40 +2,28 @@ import './Configurations.scss';
 
 import { ConnectedProps, connect, useSelector } from 'react-redux';
 
-import { ConfigurationAction } from '../../../reducers/configuration/configuration.actions';
 import CustomDetails from '../../ui/CustomDetails/CustomDetails';
 import CustomTable from '../../ui/CustomTable/CustomTable';
-import { Dispatch } from 'redux';
 import { RootState } from '../../../reducers/root.reducers';
-import { resetApplication } from '../../../reducers/configuration/configuration.action-creators';
 import { selectApplications } from '../../../reducers/configuration/configuration.selectors';
 
-const Configurations: React.FC<ConfigurationProps> = ({ showApplication, resetApplication }) => {
-  const headers = ['Name', 'Owner', 'Manager'];
-  const applications = useSelector(selectApplications);
+const Configurations: React.FC<ConfigurationProps> = ({ showApplication }) => {
+  const headers = [
+    { type: 'metaData', field: 'name', label: 'Name' },
+    { type: 'metaData', field: 'owner', label: 'Owner' },
+    { type: 'metaData', field: 'manager', label: 'Manager' },
+  ];
 
-  //const [isShown, setIsShown] = useState(false);
+  const applications = useSelector(selectApplications);
 
   const renderTable = () => {
     if (applications && applications.length > 0) return <CustomTable headers={headers} data={applications} />;
     else return <span>There's no configurations</span>;
   };
 
-  const handleAddApplication = () => {
-    //setIsShown(true);
-    resetApplication();
-  };
-
   return (
-    <div className="configuration">
-      <div className="table">
-        {/* <div className="buttons">
-          <Button variant="outlined" onClick={() => handleAddApplication()}>
-            Add
-          </Button>
-        </div> */}
-        {renderTable()}
-      </div>
+    <div className="configurations">
+      <div className="table">{renderTable()}</div>
       {showApplication && (
         <div className="details">
           <CustomDetails />
@@ -49,11 +37,7 @@ const mapStateToProps = (state: RootState) => ({
   showApplication: state.configurations.showApplication,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<ConfigurationAction>) => ({
-  resetApplication: () => dispatch(resetApplication()),
-});
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
+const connector = connect(mapStateToProps);
 
 type ConfigurationProps = ConnectedProps<typeof connector>;
 

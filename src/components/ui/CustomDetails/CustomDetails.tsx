@@ -1,19 +1,20 @@
 import './CustomDetails.scss';
 
-import { ConnectedProps, connect } from 'react-redux';
 import { useEffect, useState } from 'react';
 
+import { Application } from '../../../types';
 import Box from '@mui/material/Box';
-import { Button } from '@mui/material';
+import { DetailsProps } from './types';
 import MetaData from '../../views/MetaData/MetaData';
 import { RootState } from '../../../reducers/root.reducers';
 import Tab from '@mui/material/Tab';
 import TabPanel from '../TabPanel/TabPanel';
 import Tabs from '@mui/material/Tabs';
 import TechnicalData from '../../views/TechnicalData/TechnicalData';
+import { connect } from 'react-redux';
 import { selectSelectedApplication } from '../../../reducers/configuration/configuration.selectors';
 
-const CustomDetails: React.FC<DetailProps> = ({ selectedApplication }) => {
+const CustomDetails: React.FC<Props> = ({ version, selectedApplication }) => {
   const [tabValue, setTabValue] = useState(0);
   useEffect(() => {
     setTabValue(0);
@@ -33,14 +34,12 @@ const CustomDetails: React.FC<DetailProps> = ({ selectedApplication }) => {
       </Box>
 
       <TabPanel className="tab-panel" value={tabValue} index={0}>
-        <MetaData />
+        <MetaData version={version} />
       </TabPanel>
 
       <TabPanel className="tab-panel" value={tabValue} index={1}>
-        <TechnicalData />
+        <TechnicalData version={version} />
       </TabPanel>
-
-      <Button variant="outlined">Save</Button>
     </Box>
   );
 };
@@ -49,8 +48,10 @@ const mapStateToProps = (state: RootState) => ({
   selectedApplication: selectSelectedApplication(state),
 });
 
-const connector = connect(mapStateToProps);
+interface StateProps {
+  selectedApplication?: Application;
+}
 
-type DetailProps = ConnectedProps<typeof connector>;
+type Props = StateProps & DetailsProps;
 
-export default connector(CustomDetails);
+export default connect(mapStateToProps, null)(CustomDetails);

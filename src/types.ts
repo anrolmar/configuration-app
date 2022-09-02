@@ -4,7 +4,7 @@ export interface Application {
 }
 
 export interface Version {
-  date: Date;
+  date: string;
   metaData: MetaData;
   technicalData: TechnicalData;
 }

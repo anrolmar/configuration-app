@@ -4,13 +4,13 @@ import { ConfigurationActionType } from './types';
 
 interface ConfigurationState {
   applications: Application[];
-  selectedApplication: Application | null;
+  selectedApplication: Application | undefined;
   showApplication: boolean;
 }
 
 const INITIAL_STATE: ConfigurationState = {
   applications: [],
-  selectedApplication: null,
+  selectedApplication: undefined,
   showApplication: false,
 };
 
@@ -34,7 +34,7 @@ const configurationReducer = (
     case ConfigurationActionType.RESET_APPLICATION:
       return {
         ...state,
-        selectedApplication: null,
+        selectedApplication: undefined,
       };
 
     case ConfigurationActionType.SHOW_APPLICATION:

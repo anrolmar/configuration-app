@@ -1,17 +1,26 @@
 import './TechnicalData.scss';
 
-import { ConnectedProps, connect } from 'react-redux';
+import { Application, Role, Version } from '../../../types';
 import { FormControl, InputLabel, List, ListItem, ListItemButton, ListItemText, MenuItem, Select } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 import { RootState } from '../../../reducers/root.reducers';
 import { SelectChangeEvent } from '@mui/material';
+import { TechnicalDataProps } from './types';
+import { connect } from 'react-redux';
 import { selectSelectedApplication } from '../../../reducers/configuration/configuration.selectors';
 import useConfigurations from '../../../hooks/useConfigurations';
 
-const TechnicalData: React.FC<TechnicalDataProps> = ({ selectedApplication }) => {
-  const { getLastVersion } = useConfigurations();
-  const lastVersion = getLastVersion(selectedApplication);
+const TechnicalData: React.FC<Props> = ({ version, selectedApplication }) => {
+  let versionData: Version | undefined;
+
+  const { getVersion, getLastVersion } = useConfigurations();
+
+  if (version) {
+    versionData = getVersion(selectedApplication, version);
+  } else {
+    if (selectedApplication) versionData = getLastVersion(selectedApplication);
+  }
 
   const [role, setRole] = useState('');
   const [permissions, setPermissions] = useState<string[]>([]);
@@ -34,31 +43,25 @@ const TechnicalData: React.FC<TechnicalDataProps> = ({ selectedApplication }) =>
     }
   };
 
-  const handleTabChange = (event: SelectChangeEvent) => {
+  const handleRoleChange = (event: SelectChangeEvent) => {
     setRole(event.target.value);
-    const currentPermissions = lastVersion?.technicalData.roles.find(
-      (role) => role.name === event.target.value,
+    const currentPermissions = versionData?.technicalData.roles.find(
+      (role: Role) => role.name === event.target.value,
     )?.permissions;
 
     if (currentPermissions) setPermissions(currentPermissions);
   };
-
-  const handleAddPermission = () => {};
 
   return (
     <div className="technical-data">
       <div className="roles">
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
           <InputLabel id="select-role-label">Roles</InputLabel>
-          <Select labelId="select-role-label" id="select-role" value={role} label="Role" onChange={handleTabChange}>
+          <Select labelId="select-role-label" id="select-role" value={role} label="Role" onChange={handleRoleChange}>
             <MenuItem value={'user'}>User</MenuItem>
             <MenuItem value={'admin'}>Admin</MenuItem>
           </Select>
         </FormControl>
-        {/* <TextField size="small" className="input" fullWidth id="application-name" label="Name" variant="outlined" />
-        <span onClick={handleAddPermission}>
-          <i className="icon fas fa-plus-circle"></i>
-        </span> */}
       </div>
 
       <List className="permissions" disablePadding>
@@ -72,8 +75,10 @@ const mapStateToProps = (state: RootState) => ({
   selectedApplication: selectSelectedApplication(state),
 });
 
-const connector = connect(mapStateToProps);
+interface StateProps {
+  selectedApplication?: Application;
+}
 
-type TechnicalDataProps = ConnectedProps<typeof connector>;
+type Props = StateProps & TechnicalDataProps;
 
-export default connector(TechnicalData);
+export default connect(mapStateToProps, null)(TechnicalData);
