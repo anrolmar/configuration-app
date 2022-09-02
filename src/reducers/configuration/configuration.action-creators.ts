@@ -1,4 +1,9 @@
-import { LoadApplicationsAction, ResetApplicationAction, SetApplicationAction } from './configuration.actions';
+import {
+  LoadApplicationsAction,
+  ResetApplicationAction,
+  SetApplicationAction,
+  ShowApplicationAction,
+} from './configuration.actions';
 
 import { Application } from '../../types';
 import { ConfigurationActionType } from './types';
@@ -20,5 +25,11 @@ export const setApplication = (application: Application): SetApplicationAction =
   return {
     type: ConfigurationActionType.SET_APPLICATION,
     payload: application,
+  };
+};
+
+export const showApplication = (): ShowApplicationAction => {
+  return {
+    type: ConfigurationActionType.SHOW_APPLICATION,
   };
 };

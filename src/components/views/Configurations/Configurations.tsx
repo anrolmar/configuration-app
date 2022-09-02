@@ -6,15 +6,15 @@ import { ConfigurationAction } from '../../../reducers/configuration/configurati
 import CustomDetails from '../../ui/CustomDetails/CustomDetails';
 import CustomTable from '../../ui/CustomTable/CustomTable';
 import { Dispatch } from 'redux';
+import { RootState } from '../../../reducers/root.reducers';
 import { resetApplication } from '../../../reducers/configuration/configuration.action-creators';
 import { selectApplications } from '../../../reducers/configuration/configuration.selectors';
-import { useState } from 'react';
 
-const Configurations: React.FC<ConfigurationProps> = ({ resetApplication }) => {
+const Configurations: React.FC<ConfigurationProps> = ({ showApplication, resetApplication }) => {
   const headers = ['Name', 'Owner', 'Manager'];
   const applications = useSelector(selectApplications);
 
-  const [isShown, setIsShown] = useState(false);
+  //const [isShown, setIsShown] = useState(false);
 
   const renderTable = () => {
     if (applications && applications.length > 0) return <CustomTable headers={headers} data={applications} />;
@@ -22,7 +22,7 @@ const Configurations: React.FC<ConfigurationProps> = ({ resetApplication }) => {
   };
 
   const handleAddApplication = () => {
-    // setIsShown(true);
+    //setIsShown(true);
     resetApplication();
   };
 
@@ -36,7 +36,7 @@ const Configurations: React.FC<ConfigurationProps> = ({ resetApplication }) => {
         </div> */}
         {renderTable()}
       </div>
-      {isShown && (
+      {showApplication && (
         <div className="details">
           <CustomDetails />
         </div>
@@ -45,11 +45,15 @@ const Configurations: React.FC<ConfigurationProps> = ({ resetApplication }) => {
   );
 };
 
+const mapStateToProps = (state: RootState) => ({
+  showApplication: state.configurations.showApplication,
+});
+
 const mapDispatchToProps = (dispatch: Dispatch<ConfigurationAction>) => ({
   resetApplication: () => dispatch(resetApplication()),
 });
 
-const connector = connect(null, mapDispatchToProps);
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type ConfigurationProps = ConnectedProps<typeof connector>;
 

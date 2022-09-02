@@ -5,7 +5,7 @@ export interface Application {
 
 export interface Version {
   date: Date;
-  metadata: MetaData;
+  metaData: MetaData;
   technicalData: TechnicalData;
 }
 
@@ -19,7 +19,7 @@ interface TechnicalData {
   roles: Role[];
 }
 
-interface Role {
+export interface Role {
   name: string;
   permissions: string[];
 }

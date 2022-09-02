@@ -5,11 +5,13 @@ import { ConfigurationActionType } from './types';
 interface ConfigurationState {
   applications: Application[];
   selectedApplication: Application | null;
+  showApplication: boolean;
 }
 
 const INITIAL_STATE: ConfigurationState = {
   applications: [],
   selectedApplication: null,
+  showApplication: false,
 };
 
 const configurationReducer = (
@@ -17,6 +19,12 @@ const configurationReducer = (
   action: ConfigurationAction,
 ): ConfigurationState => {
   switch (action.type) {
+    case ConfigurationActionType.ADD_APPLICATION:
+      return {
+        ...state,
+        applications: [...state.applications, action.payload],
+      };
+
     case ConfigurationActionType.LOAD_APPLICATIONS:
       return {
         ...state,
@@ -29,10 +37,10 @@ const configurationReducer = (
         selectedApplication: null,
       };
 
-    case ConfigurationActionType.ADD_APPLICATION:
+    case ConfigurationActionType.SHOW_APPLICATION:
       return {
         ...state,
-        applications: [...state.applications, action.payload],
+        showApplication: true,
       };
 
     case ConfigurationActionType.SET_APPLICATION:

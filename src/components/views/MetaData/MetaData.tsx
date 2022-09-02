@@ -1,12 +1,27 @@
 import './MetaData.scss';
 
-import TextField from '@mui/material/TextField';
-import { useState } from 'react';
+import { ConnectedProps, connect } from 'react-redux';
+import { useEffect, useState } from 'react';
 
-const MetaData: React.FC = () => {
+import { RootState } from '../../../reducers/root.reducers';
+import TextField from '@mui/material/TextField';
+import { selectSelectedApplication } from '../../../reducers/configuration/configuration.selectors';
+import useConfigurations from '../../../hooks/useConfigurations';
+
+const MetaData: React.FC<MetaDataProps> = ({ selectedApplication }) => {
+  const { getLastVersion } = useConfigurations();
+  const lastVersion = getLastVersion(selectedApplication);
+
   const [name, setName] = useState('');
   const [owner, setOwner] = useState('');
   const [manager, setManager] = useState('');
+  useEffect(() => {
+    if (lastVersion) {
+      setName(lastVersion.metaData.name);
+      setOwner(lastVersion.metaData.owner);
+      setManager(lastVersion.metaData.manager);
+    }
+  }, [lastVersion]);
 
   const handleNameChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -56,4 +71,12 @@ const MetaData: React.FC = () => {
   );
 };
 
-export default MetaData;
+const mapStateToProps = (state: RootState) => ({
+  selectedApplication: selectSelectedApplication(state),
+});
+
+const connector = connect(mapStateToProps);
+
+type MetaDataProps = ConnectedProps<typeof connector>;
+
+export default connector(MetaData);

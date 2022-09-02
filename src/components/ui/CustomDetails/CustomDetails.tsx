@@ -1,6 +1,7 @@
 import './CustomDetails.scss';
 
 import { ConnectedProps, connect } from 'react-redux';
+import { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
@@ -11,29 +12,31 @@ import TabPanel from '../TabPanel/TabPanel';
 import Tabs from '@mui/material/Tabs';
 import TechnicalData from '../../views/TechnicalData/TechnicalData';
 import { selectSelectedApplication } from '../../../reducers/configuration/configuration.selectors';
-import { useState } from 'react';
 
 const CustomDetails: React.FC<DetailProps> = ({ selectedApplication }) => {
-  const [value, setValue] = useState(0);
+  const [tabValue, setTabValue] = useState(0);
+  useEffect(() => {
+    setTabValue(0);
+  }, [selectedApplication]);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+    setTabValue(newValue);
   };
 
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleTabChange}>
+        <Tabs value={tabValue} onChange={handleTabChange}>
           <Tab label="Meta Data" />
           <Tab label="Technical Data" />
         </Tabs>
       </Box>
 
-      <TabPanel className="tab-panel" value={value} index={0}>
+      <TabPanel className="tab-panel" value={tabValue} index={0}>
         <MetaData />
       </TabPanel>
 
-      <TabPanel className="tab-panel" value={value} index={1}>
+      <TabPanel className="tab-panel" value={tabValue} index={1}>
         <TechnicalData />
       </TabPanel>
 

@@ -1,5 +1,7 @@
 import './CustomTable.scss';
 
+import { setApplication, showApplication } from '../../../reducers/configuration/configuration.action-creators';
+
 import { Application } from '../../../types';
 import { ConfigurationAction } from '../../../reducers/configuration/configuration.actions';
 import { Dispatch } from 'redux';
@@ -13,9 +15,8 @@ import TableHead from '@mui/material/TableHead';
 import { TableProps } from './types';
 import TableRow from '@mui/material/TableRow';
 import { connect } from 'react-redux';
-import { setApplication } from '../../../reducers/configuration/configuration.action-creators';
 
-const CustomTable: React.FC<Props> = ({ headers, data, applications, setApplication }) => {
+const CustomTable: React.FC<Props> = ({ headers, data, applications, setApplication, showApplication }) => {
   const renderHeaders = () => {
     return headers.map((header: string, index: number) => {
       if (index === 0) {
@@ -32,6 +33,7 @@ const CustomTable: React.FC<Props> = ({ headers, data, applications, setApplicat
 
   const handleRowClick = (event: React.MouseEvent<unknown>, index: number) => {
     setApplication(applications[index]);
+    showApplication();
   };
 
   return (
@@ -49,10 +51,10 @@ const CustomTable: React.FC<Props> = ({ headers, data, applications, setApplicat
               className="row"
             >
               <TableCell component="th" scope="row">
-                {row.version.metadata.name}
+                {row.version.metaData.name}
               </TableCell>
-              <TableCell align="right">{row.version.metadata.owner}</TableCell>
-              <TableCell align="right">{row.version.metadata.manager}</TableCell>
+              <TableCell align="right">{row.version.metaData.owner}</TableCell>
+              <TableCell align="right">{row.version.metaData.manager}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -65,17 +67,17 @@ const mapStateToProps = (state: RootState) => ({
   applications: state.configurations.applications,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<ConfigurationAction>) => {
-  return {
-    setApplication: (application: Application) => dispatch(setApplication(application)),
-  };
-};
+const mapDispatchToProps = (dispatch: Dispatch<ConfigurationAction>) => ({
+  setApplication: (application: Application) => dispatch(setApplication(application)),
+  showApplication: () => dispatch(showApplication()),
+});
 
 interface StateProps {
   applications: Application[];
 }
 interface DispatchProps {
   setApplication: (application: Application) => void;
+  showApplication: () => void;
 }
 
 type Props = StateProps & DispatchProps & TableProps;

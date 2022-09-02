@@ -20,8 +20,13 @@ export interface SetApplicationAction {
   payload: Application;
 }
 
+export interface ShowApplicationAction {
+  type: ConfigurationActionType.SHOW_APPLICATION;
+}
+
 export type ConfigurationAction =
   | LoadApplicationsAction
   | AddApplicationAction
   | ResetApplicationAction
-  | SetApplicationAction;
+  | SetApplicationAction
+  | ShowApplicationAction;

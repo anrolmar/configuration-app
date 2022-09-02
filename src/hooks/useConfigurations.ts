@@ -1,4 +1,4 @@
-import { Application } from '../types';
+import { Application, Version } from '../types';
 
 const useConfigurations = () => {
   const getConfigurations = (): Application[] => {
@@ -8,7 +8,7 @@ const useConfigurations = () => {
         versions: [
           {
             date: new Date(),
-            metadata: {
+            metaData: {
               name: 'Library',
               owner: 'Owner1',
               manager: 'Manager1',
@@ -16,11 +16,11 @@ const useConfigurations = () => {
             technicalData: {
               roles: [
                 {
-                  name: 'User',
+                  name: 'user',
                   permissions: ['Books', 'Authors'],
                 },
                 {
-                  name: 'Admin',
+                  name: 'admin',
                   permissions: ['Books', 'Authors', 'Settings'],
                 },
               ],
@@ -33,7 +33,7 @@ const useConfigurations = () => {
         versions: [
           {
             date: new Date(),
-            metadata: {
+            metaData: {
               name: 'ToDo List',
               owner: 'Owner2',
               manager: 'Manager2',
@@ -41,11 +41,11 @@ const useConfigurations = () => {
             technicalData: {
               roles: [
                 {
-                  name: 'User',
+                  name: 'user',
                   permissions: ['Find', 'Add'],
                 },
                 {
-                  name: 'Admin',
+                  name: 'admin',
                   permissions: ['Find', 'Add', 'Remove', 'Settings'],
                 },
               ],
@@ -53,7 +53,7 @@ const useConfigurations = () => {
           },
           {
             date: new Date(),
-            metadata: {
+            metaData: {
               name: 'ToDo List',
               owner: 'Owner2',
               manager: 'Manager3',
@@ -61,11 +61,11 @@ const useConfigurations = () => {
             technicalData: {
               roles: [
                 {
-                  name: 'User',
+                  name: 'user',
                   permissions: ['Find', 'Add', 'Remove'],
                 },
                 {
-                  name: 'Admin',
+                  name: 'admin',
                   permissions: ['Find', 'Add', 'Settings'],
                 },
               ],
@@ -76,8 +76,14 @@ const useConfigurations = () => {
     ];
   };
 
+  const getLastVersion = (application: Application | null): Version | null => {
+    if (application) return application.versions[application.versions.length - 1];
+    return null;
+  };
+
   return {
     getConfigurations,
+    getLastVersion,
   };
 };
 
