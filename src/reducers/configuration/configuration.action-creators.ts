@@ -2,7 +2,7 @@ import {
   LoadApplicationsAction,
   ResetApplicationAction,
   SetApplicationAction,
-  ShowApplicationAction,
+  ToggleApplicationAction,
 } from './configuration.actions';
 
 import { Application } from '../../types';
@@ -28,8 +28,9 @@ export const setApplication = (application: Application): SetApplicationAction =
   };
 };
 
-export const showApplication = (): ShowApplicationAction => {
+export const toggleApplication = (value: boolean): ToggleApplicationAction => {
   return {
-    type: ConfigurationActionType.SHOW_APPLICATION,
+    type: ConfigurationActionType.TOGGLE_SHOW_APPLICATION,
+    payload: value,
   };
 };

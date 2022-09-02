@@ -1,6 +1,6 @@
 import './CustomTable.scss';
 
-import { setApplication, showApplication } from '../../../reducers/configuration/configuration.action-creators';
+import { setApplication, toggleApplication } from '../../../reducers/configuration/configuration.action-creators';
 
 import { Application } from '../../../types';
 import { ConfigurationAction } from '../../../reducers/configuration/configuration.actions';
@@ -17,7 +17,7 @@ import TableRow from '@mui/material/TableRow';
 import { connect } from 'react-redux';
 import useConfigurations from '../../../hooks/useConfigurations';
 
-const CustomTable: React.FC<Props> = ({ headers, data, applications, setApplication, showApplication }) => {
+const CustomTable: React.FC<Props> = ({ headers, data, applications, setApplication, toggleApplication }) => {
   const { getVersionValue } = useConfigurations();
 
   const renderHeaders = () => {
@@ -52,7 +52,7 @@ const CustomTable: React.FC<Props> = ({ headers, data, applications, setApplicat
 
   const handleRowClick = (event: React.MouseEvent<unknown>, index: number) => {
     setApplication(applications[index]);
-    showApplication();
+    toggleApplication(true);
   };
 
   return (
@@ -84,7 +84,7 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<ConfigurationAction>) => ({
   setApplication: (application: Application) => dispatch(setApplication(application)),
-  showApplication: () => dispatch(showApplication()),
+  toggleApplication: (value: boolean) => dispatch(toggleApplication(value)),
 });
 
 interface StateProps {
@@ -92,7 +92,7 @@ interface StateProps {
 }
 interface DispatchProps {
   setApplication: (application: Application) => void;
-  showApplication: () => void;
+  toggleApplication: (value: boolean) => void;
 }
 
 type Props = StateProps & DispatchProps & TableProps;

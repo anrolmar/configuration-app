@@ -37,10 +37,10 @@ const configurationReducer = (
         selectedApplication: undefined,
       };
 
-    case ConfigurationActionType.SHOW_APPLICATION:
+    case ConfigurationActionType.TOGGLE_SHOW_APPLICATION:
       return {
         ...state,
-        showApplication: true,
+        showApplication: action.payload,
       };
 
     case ConfigurationActionType.SET_APPLICATION:

@@ -27,7 +27,7 @@ const TechnicalData: React.FC<Props> = ({ version, selectedApplication }) => {
   useEffect(() => {
     setRole('');
     setPermissions([]);
-  }, [selectedApplication]);
+  }, [selectedApplication, version]);
 
   const renderPermissions = () => {
     if (permissions) {

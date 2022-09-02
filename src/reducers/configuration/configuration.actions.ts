@@ -20,8 +20,9 @@ export interface SetApplicationAction {
   payload: Application;
 }
 
-export interface ShowApplicationAction {
-  type: ConfigurationActionType.SHOW_APPLICATION;
+export interface ToggleApplicationAction {
+  type: ConfigurationActionType.TOGGLE_SHOW_APPLICATION;
+  payload: boolean;
 }
 
 export type ConfigurationAction =
@@ -29,4 +30,4 @@ export type ConfigurationAction =
   | AddApplicationAction
   | ResetApplicationAction
   | SetApplicationAction
-  | ShowApplicationAction;
+  | ToggleApplicationAction;

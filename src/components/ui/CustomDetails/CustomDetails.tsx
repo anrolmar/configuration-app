@@ -18,7 +18,7 @@ const CustomDetails: React.FC<Props> = ({ version, selectedApplication }) => {
   const [tabValue, setTabValue] = useState(0);
   useEffect(() => {
     setTabValue(0);
-  }, [selectedApplication]);
+  }, [selectedApplication, version]);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
